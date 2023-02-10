@@ -16,7 +16,7 @@ namespace Labyrinth
 
         public Crate(int x, int y, ContentManager contentManager, Board board) : base(x, y)
         {
-            sprite = contentManager.Load<Texture2D>("crate");
+            sprite = contentManager.Load<Texture2D>("Box");
             this.board = board;
         }
 
