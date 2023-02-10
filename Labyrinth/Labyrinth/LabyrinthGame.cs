@@ -13,6 +13,7 @@ namespace Labyrinth
         public const int HEIGHT = 288;
         public const int GAME_UPSCALE = 2;
         public const int CELL_SIZE = 32;
+        Board board;
 
         public LabyrinthGame()
         {
@@ -26,6 +27,7 @@ namespace Labyrinth
             // TODO: Add your initialization logic here
 
             base.Initialize();
+            board = new(Content);
         }
 
         protected override void LoadContent()
@@ -47,17 +49,16 @@ namespace Labyrinth
 
         protected override void Draw(GameTime gameTime)
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            _spriteBatch.Begin();
-
-            
+            Matrix matrix = Matrix.CreateScale(GAME_UPSCALE);
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: matrix);
 
             // TODO: Add your drawing code here
 
-            base.Draw(gameTime);
             _spriteBatch.End();
+            base.Draw(gameTime);
             
         }
     }

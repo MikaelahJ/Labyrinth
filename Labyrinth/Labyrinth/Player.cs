@@ -50,7 +50,7 @@ namespace Labyrinth
             BoardObject searched = board.GetObjectAtPosition(x + xMove, y + yMove);
             if (searched != null)
             {
-                if (searched is Crate box)
+                if (searched is Box box)
                 {
                     if (box.AttemptMove(xMove, yMove, depth) == false)
                     {

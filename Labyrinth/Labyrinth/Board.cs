@@ -63,7 +63,7 @@ namespace Labyrinth
                     break;
 
                 case box:
-                    objectsOnBoard.Add(new Crate(x, y, content, this));
+                    objectsOnBoard.Add(new Box(x, y, content, this));
                     break;
             }
         }
@@ -151,7 +151,7 @@ namespace Labyrinth
                             board[x, y] = floor;
                             break;
                         case box:
-                            objectsOnBoard.Add(new Crate(x, y, content, this));
+                            objectsOnBoard.Add(new Box(x, y, content, this));
                             board[x, y] = floor;
                             break;
 
@@ -176,7 +176,7 @@ namespace Labyrinth
                         {
                             return false;
                         }
-                        else if (objAtPosition.GetType() != typeof(Crate))
+                        else if (objAtPosition.GetType() != typeof(Box))
                         {
                             return false;
                         }

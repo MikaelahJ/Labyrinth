@@ -10,11 +10,11 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Labyrinth
 {
-    public class Crate : BoardObject
+    public class Box : BoardObject
     {
         private Board board;
 
-        public Crate(int x, int y, ContentManager contentManager, Board board) : base(x, y)
+        public Box(int x, int y, ContentManager contentManager, Board board) : base(x, y)
         {
             sprite = contentManager.Load<Texture2D>("Box");
             this.board = board;
@@ -27,7 +27,7 @@ namespace Labyrinth
             var searched = board.GetObjectAtPosition(x + xMove, y + yMove);
             if (searched != null)
             {
-                if (searched.GetType() == typeof(Crate) && !searched.AttemptMove(xMove, yMove, depth - 1))
+                if (searched.GetType() == typeof(Box) && !searched.AttemptMove(xMove, yMove, depth - 1))
                 {
                     return false;
                 }
