@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace Labyrinth
 {
@@ -23,10 +18,10 @@ namespace Labyrinth
         private Bitmap worldMap;
 
         public const char player = 'p';
-        public const char ground = 'g';
+        public const char floor = 'f';
         public const char wall = 'w';
         public const char box = 'b';
-        public const char finish = 'f';
+        public const char goal = 'g';
 
         // our custom board objects
         public const char cyan = 'c';
@@ -153,11 +148,11 @@ namespace Labyrinth
                     {
                         case player:
                             objectsOnBoard.Add(new Player(x, y, content, this));
-                            board[x, y] = ground;
+                            board[x, y] = floor;
                             break;
                         case box:
                             objectsOnBoard.Add(new Crate(x, y, content, this));
-                            board[x, y] = ground;
+                            board[x, y] = floor;
                             break;
 
                     }
@@ -174,7 +169,7 @@ namespace Labyrinth
             {
                 for (int y = 0; y < board.GetLength(1); y++)
                 {
-                    if (board[x, y] == finish)
+                    if (board[x, y] == goal)
                     {
                         var objAtPosition = GetObjectAtPosition(x, y);
                         if (objAtPosition == null)
@@ -204,7 +199,7 @@ namespace Labyrinth
 
                     switch (board[x, y])
                     {
-                        case ground:
+                        case floor:
                             batch.Draw(floorSprite, position, Microsoft.Xna.Framework.Color.White);
                             break;
                         case wall:
