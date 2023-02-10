@@ -25,18 +25,19 @@ namespace Labyrinth
         public const char player = 'p';
         public const char ground = 'g';
         public const char wall = 'w';
-        public const char crate = 'c';
+        public const char box = 'b';
         public const char finish = 'f';
 
         // our custom board objects
-        public const char blue = 'b';
-        public const char purple = 'p';
+        public const char cyan = 'c';
+        public const char magenta = 'm';
 
         private Vector2 boardOffset;
 
         public Board(ContentManager _content)
         {
             content = _content;
+            worldMap = new Bitmap("Main.png");
             floorSprite = content.Load<Texture2D>("Floor");
             wallSprite = content.Load<Texture2D>("Wall");
             goalSprite = content.Load<Texture2D>("Goal");
@@ -66,7 +67,7 @@ namespace Labyrinth
                     objectsOnBoard.Add(new Player(x, y, content, this));
                     break;
 
-                case crate:
+                case box:
                     objectsOnBoard.Add(new Crate(x, y, content, this));
                     break;
             }
@@ -154,7 +155,7 @@ namespace Labyrinth
                             objectsOnBoard.Add(new Player(x, y, content, this));
                             board[x, y] = ground;
                             break;
-                        case crate:
+                        case box:
                             objectsOnBoard.Add(new Crate(x, y, content, this));
                             board[x, y] = ground;
                             break;
