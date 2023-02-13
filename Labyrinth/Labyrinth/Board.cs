@@ -42,11 +42,7 @@ namespace Labyrinth
             mainMap = GetBitmap("Main");
             layer1 = GetBitmap("Layer1");
             layer2 = GetBitmap("Layer2");
-
-
-            var temp = content.Load<Texture2D>("Main");
-
-            BitmapToArray(mainMap);
+            //int[,] intMap = BitmapToArray(mainMap);
 
             floorSprite = content.Load<Texture2D>("Floor");
             wallSprite = content.Load<Texture2D>("Wall");
