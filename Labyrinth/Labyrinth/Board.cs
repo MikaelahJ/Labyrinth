@@ -6,6 +6,8 @@ using System.IO;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Diagnostics;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 
 namespace Labyrinth
 {
@@ -41,6 +43,11 @@ namespace Labyrinth
             layer1 = GetBitmap("Layer1");
             layer2 = GetBitmap("Layer2");
 
+
+            var temp = content.Load<Texture2D>("Main");
+
+            BitmapToArray(mainMap);
+
             floorSprite = content.Load<Texture2D>("Floor");
             wallSprite = content.Load<Texture2D>("Wall");
             goalSprite = content.Load<Texture2D>("Goal");
@@ -53,6 +60,22 @@ namespace Labyrinth
             texture.SaveAsJpeg(memoryStream, texture.Width, texture.Height);
 
             return new Bitmap(memoryStream);
+        }
+
+        private int[,] BitmapToArray(Bitmap map)
+        {
+            int width = map.Width; 
+            int height = map.Height;
+            int[,] result = new int[width,height];
+
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    result[x,y] = map.GetPixel(x, y).R < 200 ? 1 : 0;
+                }
+            }
+            return result;
         }
 
         public int GetBoardWidth() => board.GetLength(0) - 1;
