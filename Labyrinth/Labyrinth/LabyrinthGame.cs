@@ -13,7 +13,7 @@ namespace Labyrinth
         public const int HEIGHT = 288;
         public const int GAME_UPSCALE = 2;
         public const int CELL_SIZE = 32;
-        Board board;
+        private Board board;
 
         public LabyrinthGame()
         {
@@ -25,6 +25,7 @@ namespace Labyrinth
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            board = new(Content);
 
             base.Initialize();
             board = new(Content);
@@ -41,7 +42,6 @@ namespace Labyrinth
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
             // TODO: Add your update logic here
 
             base.Update(gameTime);

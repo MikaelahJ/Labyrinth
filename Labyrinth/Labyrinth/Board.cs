@@ -1,8 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Diagnostics;
 
 namespace Labyrinth
 {
@@ -15,7 +18,9 @@ namespace Labyrinth
         private Texture2D floorSprite;
         private Texture2D wallSprite;
         private Texture2D goalSprite;
-        private Bitmap worldMap;
+        private Bitmap mainMap;
+        private Bitmap layer1;
+        private Bitmap layer2;
 
         public const char player = 'p';
         public const char floor = 'f';
@@ -32,10 +37,22 @@ namespace Labyrinth
         public Board(ContentManager _content)
         {
             content = _content;
-            worldMap = new Bitmap("Main.png");
+            mainMap = GetBitmap("Main");
+            layer1 = GetBitmap("Layer1");
+            layer2 = GetBitmap("Layer2");
+
             floorSprite = content.Load<Texture2D>("Floor");
             wallSprite = content.Load<Texture2D>("Wall");
             goalSprite = content.Load<Texture2D>("Goal");
+        }
+
+        private Bitmap GetBitmap(string textureName)
+        {
+            MemoryStream memoryStream = new MemoryStream();
+            Texture2D texture = content.Load<Texture2D>(textureName);
+            texture.SaveAsJpeg(memoryStream, texture.Width, texture.Height);
+
+            return new Bitmap(memoryStream);
         }
 
         public int GetBoardWidth() => board.GetLength(0) - 1;
