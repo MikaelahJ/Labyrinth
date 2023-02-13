@@ -13,6 +13,7 @@ namespace Labyrinth
 {
     public class Board
     {
+        private int cellSize = 32;
         private char[,] board;
         private ContentManager content;
         private List<BoardObject> objectsOnBoard;
