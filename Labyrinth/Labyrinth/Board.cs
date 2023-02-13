@@ -70,7 +70,7 @@ namespace Labyrinth
         {
             MemoryStream memoryStream = new MemoryStream();
             Texture2D texture = content.Load<Texture2D>(textureName);
-            texture.SaveAsJpeg(memoryStream, texture.Width, texture.Height);
+            texture.SaveAsPng(memoryStream, texture.Width, texture.Height);
 
             return new Bitmap(memoryStream);
         }
