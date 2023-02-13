@@ -40,10 +40,6 @@ namespace Labyrinth
                 case "RIGHT":
                     AttemptMove(1, 0, 0, isHoldingBox);
                     break;
-
-                case "SPACE":
-
-                    break;
             }
         }
 

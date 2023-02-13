@@ -52,11 +52,11 @@ namespace Labyrinth
 
                         if (prevKeys == null)
                         {
-                            //Send(choosenInput);
+                            Send(choosenInput, isHoldingBox);
                         }
                         else if (prevKeys.Contains(key) == false)
                         {
-                            //Send(choosenInput);
+                            Send(choosenInput, isHoldingBox);
                         }
                     }
                 }
@@ -68,7 +68,6 @@ namespace Labyrinth
                         break;
                     }
                 }
-
             }
 
             prevKeys = keyboardState.GetPressedKeys();

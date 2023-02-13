@@ -20,14 +20,14 @@ namespace Labyrinth
             this.board = board;
         }
 
-        public override bool AttemptMove(int xMove, int yMove, int depth)
+        public override bool AttemptMove(int xMove, int yMove, int depth, bool isHolding = false)
         {
             if (!board.IsSpaceWalkable(x + xMove, y + yMove)) return false;
             if (board.IsPositionOutsideOfBoard(x + xMove, y + yMove)) return false;
             var searched = board.GetObjectAtPosition(x + xMove, y + yMove);
             if (searched != null)
             {
-                if (searched.GetType() == typeof(Box) && !searched.AttemptMove(xMove, yMove, depth - 1))
+                if (searched.GetType() == typeof(Box) && !searched.AttemptMove(xMove, yMove, depth - 1, false))
                 {
                     return false;
                 }
