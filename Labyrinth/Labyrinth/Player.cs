@@ -16,7 +16,7 @@ namespace Labyrinth
         public Player(int x, int y, ContentManager contentManager, Board board) : base(x, y)
         {
             sprite = contentManager.Load<Texture2D>("Char");
-            drawPosition = new Vector2(x * 32, y * 32);
+            drawPosition = new Vector2(0 * 32, 0 * 32);
             this.board = board;
             InputSystem.player = this;
         }

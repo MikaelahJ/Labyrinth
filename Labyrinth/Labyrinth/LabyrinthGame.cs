@@ -11,11 +11,12 @@ namespace Labyrinth
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        public const int WIDTH = 512;
-        public const int HEIGHT = 288;
+        public const int GAME_WIDTH = 512;
+        public const int GAME_HEIGHT = 288;
         public const int GAME_UPSCALE = 2;
         public const int CELL_SIZE = 32;
         private Board board;
+        private BoardObject boardObject;
 
         public LabyrinthGame()
         {
@@ -26,6 +27,9 @@ namespace Labyrinth
 
         protected override void Initialize()
         {
+            _graphics.PreferredBackBufferHeight = GAME_HEIGHT * GAME_UPSCALE;
+            _graphics.PreferredBackBufferWidth = GAME_WIDTH * GAME_UPSCALE;
+            _graphics.ApplyChanges();
             // TODO: Add your initialization logic here
             board = new(Content);
             base.Initialize();
@@ -43,19 +47,20 @@ namespace Labyrinth
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             // TODO: Add your update logic here
-            board.Draw(_spriteBatch, Vector2.Zero);
+            board.Update(0.016f);
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(new Color(20, 21, 46));
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             Matrix matrix = Matrix.CreateScale(GAME_UPSCALE);
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: matrix);
 
             // TODO: Add your drawing code here
+            board.Draw(_spriteBatch, Vector2.Zero);
 
             _spriteBatch.End();
             base.Draw(gameTime);

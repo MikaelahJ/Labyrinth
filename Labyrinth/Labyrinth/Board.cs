@@ -8,13 +8,20 @@ using System.Drawing;
 using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using SharpDX.Direct3D9;
+using SharpDX.MediaFoundation;
 
 namespace Labyrinth
 {
     public class Board
     {
         private int cellSize = 32;
+        private int worldWidth = 16;
+        private int worldHeight = 9;
         private char[,] board;
+
+        char[,] mapArray = new char[16, 9];
+
         private ContentManager content;
         private List<BoardObject> objectsOnBoard;
 
@@ -43,11 +50,20 @@ namespace Labyrinth
             mainMap = GetBitmap("Main");
             layer1 = GetBitmap("Layer1");
             layer2 = GetBitmap("Layer2");
-            //int[,] intMap = BitmapToArray(mainMap);
 
+            //var test = GetBitmap("Test");
+
+            BitmapToArray(mainMap, 'w');
+            BitmapToArray(layer1, 'c');
+            BitmapToArray(layer2, 'm');
+
+            mapArray[12, 7] = 'g';
+
+            SetBoard(mapArray);
+            
             floorSprite = content.Load<Texture2D>("Floor");
             wallSprite = content.Load<Texture2D>("Wall");
-            //goalSprite = content.Load<Texture2D>("Goal");
+            goalSprite = content.Load<Texture2D>("Goal");
         }
 
         private Bitmap GetBitmap(string textureName)
@@ -59,20 +75,23 @@ namespace Labyrinth
             return new Bitmap(memoryStream);
         }
 
-        private int[,] BitmapToArray(Bitmap map)
+        private void BitmapToArray(Bitmap map, char type)
         {
-            int width = map.Width; 
+            int width = map.Width;
             int height = map.Height;
-            int[,] result = new int[width,height];
+            char[,] result = new char[width, height];
 
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
                 {
-                    result[x,y] = map.GetPixel(x, y).R < 200 ? 1 : 0;
+                    if (mapArray[x, y] != 0 && mapArray[x, y] != 'f') continue;
+
+                    mapArray[x, y] = map.GetPixel(x, y).R < 200 ? type : 'f';
+
+                    Debug.WriteLine(mapArray[x, y]);
                 }
             }
-            return result;
         }
 
         public int GetBoardWidth() => board.GetLength(0) - 1;
@@ -87,12 +106,6 @@ namespace Labyrinth
 
         public void AddObject(char c, int x, int y)
         {
-            var objOnSpot = GetObjectAtPosition(x, y);
-            if (objOnSpot != null)
-            {
-                objectsOnBoard.Remove(objOnSpot);
-            }
-
             switch (c)
             {
                 case player:
@@ -120,8 +133,8 @@ namespace Labyrinth
 
         public bool IsPositionOutsideOfBoard(int x, int y)
         {
-            if (x > board.GetLength(0) - 1 || x < 0) return true;
-            if (y > board.GetLength(1) - 1 || y < 0) return true;
+            if (x > worldWidth - 1 || x < 0) return true;
+            if (y > worldHeight - 1 || y < 0) return true;
             return false;
         }
 
@@ -165,38 +178,13 @@ namespace Labyrinth
 
         public void SetBoard(char[,] newBoard)
         {
-            for (int i = 0; i < 3; i++)
-            {
-                newBoard = RotateArrayClockwise(newBoard);
-            }
-
             objectsOnBoard = new List<BoardObject>();
-            int width = newBoard.GetLength(0);
-            int height = newBoard.GetLength(1);
+            int width = worldWidth;
+            int height = worldHeight;
             board = new char[width, height];
 
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    board[x, y] = newBoard[x, height - 1 - y];
-
-                    switch (board[x, y])
-                    {
-                        case player:
-                            objectsOnBoard.Add(new Player(x, y, content, this));
-                            board[x, y] = floor;
-                            break;
-                        case box:
-                            objectsOnBoard.Add(new Box(x, y, content, this));
-                            board[x, y] = floor;
-                            break;
-
-                    }
-                }
-            }
-
-            boardOffset = new Vector2((board.GetLength(0) * 32) / 2, (board.GetLength(1) * 32) / 2);
+            objectsOnBoard.Add(new Player(0, 0, content, this));
+            objectsOnBoard.Add(new Box(0, 2, content, this));
         }
 
 
@@ -224,23 +212,37 @@ namespace Labyrinth
             return true;
         }
 
+
+        public void Update(float dt)
+        {
+            foreach (var obj in objectsOnBoard)
+            {
+                obj.Update(dt);
+            }
+        }
+
         public void Draw(SpriteBatch batch, Vector2 offset)
         {
-            if (board == null) return;
-            for (int x = 0; x < board.GetLength(0); x++)
+            if (mapArray == null) return;
+            for (int x = 0; x < worldWidth; x++)
             {
-                for (int y = 0; y < board.GetLength(1); y++)
+                for (int y = 0; y < worldHeight; y++)
                 {
                     Vector2 position = new Vector2(x * 32, y * 32);
-                    position += offset;
 
-                    switch (board[x, y])
+                    switch (mapArray[x, y])
                     {
                         case floor:
-                            batch.Draw(floorSprite, position, Microsoft.Xna.Framework.Color.White);
+                            batch.Draw(floorSprite, position, new Microsoft.Xna.Framework.Color(20, 21, 46));
                             break;
                         case wall:
-                            batch.Draw(wallSprite, position, Microsoft.Xna.Framework.Color.White);
+                            batch.Draw(wallSprite, position, new Microsoft.Xna.Framework.Color(2, 56, 46));
+                            break;
+                        case cyan:
+                            batch.Draw(wallSprite, position, new Microsoft.Xna.Framework.Color(0, 247, 255));
+                            break;
+                        case magenta:
+                            batch.Draw(wallSprite, position, new Microsoft.Xna.Framework.Color(247, 0, 255));
                             break;
                         case goal:
                             batch.Draw(goalSprite, position, Microsoft.Xna.Framework.Color.White);
@@ -248,6 +250,12 @@ namespace Labyrinth
                     }
                 }
             }
+
+            foreach (var obj in objectsOnBoard)
+            {
+                obj.Draw(batch, offset);
+            }
+
         }
 
         public bool GetIsLevelBound()
