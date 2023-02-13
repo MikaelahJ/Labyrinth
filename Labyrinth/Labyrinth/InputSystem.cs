@@ -14,9 +14,11 @@ namespace Labyrinth
     public class InputSystem
     {
         private InputList list;
+        public static Player player;
 
         private Keys[] prevKeys;
 
+        private bool isHoldingBox;
         public void SetInputList(InputList _list)
         {
             list = _list;
@@ -41,16 +43,20 @@ namespace Labyrinth
                 {
                     foreach (var key in input.GetKeys())
                     {
-                        if (keyboardState.IsKeyDown(key))
+                        if (keyboardState.IsKeyDown(key) && key == Keys.Space)
                         {
-                            if (prevKeys == null)
-                            {
-                                //Send(choosenInput);
-                            }
-                            else if (prevKeys.Contains(key) == false)
-                            {
-                                //Send(choosenInput);
-                            }
+                            isHoldingBox = true;
+                            Send(choosenInput, isHoldingBox);
+                        }
+                        else { isHoldingBox = false; }
+
+                        if (prevKeys == null)
+                        {
+                            //Send(choosenInput);
+                        }
+                        else if (prevKeys.Contains(key) == false)
+                        {
+                            //Send(choosenInput);
                         }
                     }
                 }
@@ -68,94 +74,9 @@ namespace Labyrinth
             prevKeys = keyboardState.GetPressedKeys();
         }
 
-        //public void Send(string input)
-        //{
-        //    SendFinalInput(input);
-
-        //    if (firstHandler == null)
-        //    {
-        //        SendFinalInput(input);
-        //    }
-        //    else
-        //    {
-        //        SendFinalInput(firstHandler.RecieveInput(input));
-        //    }
-        //}
-
-        //public void AddHandler(InputHandler newHandler)
-        //{
-        //    Debug.Log("adding input handler: " + newHandler);
-        //    if (firstHandler == null) firstHandler = newHandler;
-
-        //    else if (IsInputHandlerPresentInChain(newHandler, firstHandler))
-        //    {
-        //        Debug.LogWarning("handler: " + newHandler + " already present in chain");
-        //    }
-
-        //    else GetLastHandler().SetNextHandler(newHandler);
-        //}
-
-        //public void RemoveHandler(InputHandler remove)
-        //{
-
-        //    if (firstHandler == null) return;
-
-        //    if (firstHandler == remove)
-        //    {
-        //        firstHandler = firstHandler.GetNextHandler();
-        //        return;
-        //    }
-        //    if (IsInputHandlerPresentInChain(remove, firstHandler) == false) return;
-
-        //    InputHandler parent = GetParentHandlerFor(remove, firstHandler);
-
-        //    // we're not removing The Last handler
-        //    if (GetLastHandler() != remove)
-        //    {
-        //        InputHandler child = remove.GetNextHandler();
-
-        //        parent.SetNextHandler(child);
-        //    }
-        //    else
-        //    {
-        //        parent.SetNextHandler(null);
-        //    }
-
-        //}
-
-        //private InputHandler GetParentHandlerFor(InputHandler h, InputHandler evaluatedParent)
-        //{
-        //    if (firstHandler == h) return h;
-
-        //    if (evaluatedParent.GetNextHandler() == h) return evaluatedParent;
-
-        //    return GetParentHandlerFor(h, evaluatedParent.GetNextHandler());
-        //}
-
-        //private bool IsInputHandlerPresentInChain(InputHandler h, InputHandler evaluatedParent)
-        //{
-        //    if (evaluatedParent.GetNextHandler() == null) return false;
-        //    if (firstHandler == null) return false;
-        //    if (firstHandler == h) return true;
-
-        //    if (evaluatedParent.GetNextHandler() == h) return true;
-
-        //    return IsInputHandlerPresentInChain(h, evaluatedParent.GetNextHandler());
-        //}
-
-        //public InputHandler GetLastHandler()
-        //{
-        //    return firstHandler.GetLastHandler();
-        //}
-
-        //private void SendFinalInput(string input)
-        //{
-        //    if (objectsToService == null || objectsToService.Count == 0) return;
-
-        //    foreach (var obj in objectsToService)
-        //    {
-        //        obj.RecieveInput(input);
-        //    }
-        //}
+        public void Send(string input, bool isHolding)
+        {
+            player.RecieveInput(input, isHolding);
+        }
     }
 }

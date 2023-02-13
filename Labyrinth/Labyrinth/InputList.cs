@@ -20,7 +20,7 @@ namespace Labyrinth
         const string DOWN = "DOWN";
         const string LEFT = "LEFT";
         const string RIGHT = "RIGHT";
-        const string SELECT = "SELECT";
+        const string SPACE = "SPACE";
         const string PAUSE = "PAUSE";
 
         public class Input
@@ -117,7 +117,7 @@ namespace Labyrinth
             Input baseDown = new(new List<Keys> { Keys.Down, Keys.S }, DOWN, true, 0.2f, 0.015f, 10);
             if (inputs.Contains(baseDown) == false) AddInput(baseDown);
 
-            Input baseSelect = new(new List<Keys> { Keys.Enter, Keys.Space }, SELECT, false);
+            Input baseSelect = new(new List<Keys> { Keys.Enter, Keys.Space }, SPACE, false);
             if (inputs.Contains(baseSelect) == false) AddInput(baseSelect);
 
             //Input baseBack = new Input(new List<Keys> { Keys.Z }, BACK, false);

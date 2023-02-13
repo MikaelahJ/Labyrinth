@@ -46,7 +46,7 @@ namespace Labyrinth
             drawPosition = Vector2.Lerp(drawPosition, truePosition, moveTimer);
         }
 
-        public abstract bool AttemptMove(int xMove, int yMove, int depth);
+        public abstract bool AttemptMove(int xMove, int yMove, int depth, bool isHolding);
 
         public virtual void Draw(SpriteBatch batch, Vector2 offset)
         {

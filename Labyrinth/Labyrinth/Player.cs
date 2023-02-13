@@ -18,31 +18,36 @@ namespace Labyrinth
             sprite = contentManager.Load<Texture2D>("Char");
             drawPosition = new Vector2(x * 32, y * 32);
             this.board = board;
+            InputSystem.player = this;
         }
 
-        public void RecieveInput(string input)
+        public void RecieveInput(string input, bool isHoldingBox = false)
         {
             switch (input)
             {
                 case "UP":
-                    AttemptMove(0, 1, 0);
+                    AttemptMove(0, 1, 0, isHoldingBox);
                     break;
 
                 case "DOWN":
-                    AttemptMove(0, -1, 0);
+                    AttemptMove(0, -1, 0, isHoldingBox);
                     break;
 
                 case "LEFT":
-                    AttemptMove(-1, 0, 0);
+                    AttemptMove(-1, 0, 0, isHoldingBox);
                     break;
 
                 case "RIGHT":
-                    AttemptMove(1, 0, 0);
+                    AttemptMove(1, 0, 0, isHoldingBox);
+                    break;
+
+                case "SPACE":
+
                     break;
             }
         }
 
-        public override bool AttemptMove(int xMove, int yMove, int depth)
+        public override bool AttemptMove(int xMove, int yMove, int depth, bool isHolding = false)
         {
             if (board.IsSpaceWalkable(x + xMove, y + yMove) == false) return false;
             if (board.IsPositionOutsideOfBoard(x + xMove, y + yMove)) return false;
@@ -62,8 +67,19 @@ namespace Labyrinth
                     return false;
                 }
             }
+           
 
             DoMove(xMove, yMove);
+
+            BoardObject isBoxHere = board.GetObjectAtPosition(x - xMove, y - yMove);
+            if (isBoxHere != null)
+            {
+                if (isBoxHere is Box box)
+                {
+                    box.AttemptMove(xMove, yMove, depth);
+                }
+            }
+
             return true;
         }
     }

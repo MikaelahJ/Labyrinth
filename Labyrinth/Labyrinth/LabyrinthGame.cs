@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Diagnostics;
 
 namespace Labyrinth
 {
@@ -26,9 +28,7 @@ namespace Labyrinth
         {
             // TODO: Add your initialization logic here
             board = new(Content);
-
             base.Initialize();
-            board = new(Content);
         }
 
         protected override void LoadContent()

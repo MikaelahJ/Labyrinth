@@ -46,7 +46,7 @@ namespace Labyrinth
 
             floorSprite = content.Load<Texture2D>("Floor");
             wallSprite = content.Load<Texture2D>("Wall");
-            goalSprite = content.Load<Texture2D>("Goal");
+            //goalSprite = content.Load<Texture2D>("Goal");
         }
 
         private Bitmap GetBitmap(string textureName)
