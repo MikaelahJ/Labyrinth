@@ -43,7 +43,7 @@ namespace Labyrinth
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             // TODO: Add your update logic here
-
+            board.Draw(_spriteBatch, Vector2.Zero);
             base.Update(gameTime);
         }
 
