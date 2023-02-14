@@ -11,6 +11,9 @@ namespace Labyrinth
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        private SpriteFont spriteFont;
+
+
         private InputList gameInput;
 
         public const int GAME_WIDTH = 512;
@@ -43,7 +46,7 @@ namespace Labyrinth
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            spriteFont = Content.Load<SpriteFont>("File");
             // TODO: use this.Content to load your game content here
         }
 
@@ -68,8 +71,8 @@ namespace Labyrinth
             Matrix matrix = Matrix.CreateScale(GAME_UPSCALE);
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: matrix);
 
-            // TODO: Add your drawing code here
             board.Draw(_spriteBatch, Vector2.Zero);
+            _spriteBatch.DrawString(spriteFont, "Press ENTER to switch walls", new Vector2(35, 1), Color.White);
 
             _spriteBatch.End();
             base.Draw(gameTime);
