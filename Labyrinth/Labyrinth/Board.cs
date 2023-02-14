@@ -42,11 +42,14 @@ namespace Labyrinth
         public const char cyan = 'c';
         public const char magenta = 'm';
 
+        public const char cyanTransparent = 'C';
+        public const char magentaTransparent = 'M';
+
         SpriteBatch _batch;
 
         public bool cyanActive = true;
 
-        private Vector2 boardOffset;
+        public Vector2 goalPos = new Vector2(12, 7);
 
         public Board(ContentManager _content)
         {
@@ -61,10 +64,10 @@ namespace Labyrinth
             BitmapToArray(layer1, 'c');
             BitmapToArray(layer2, 'm');
 
-            mapArray[12, 7] = 'g';
+            mapArray[(int)goalPos.X, (int)goalPos.Y] = 'g';
 
             SetBoard(mapArray);
-            
+
             floorSprite = content.Load<Texture2D>("Floor");
             wallSprite = content.Load<Texture2D>("Wall");
             goalSprite = content.Load<Texture2D>("Goal");
@@ -98,13 +101,12 @@ namespace Labyrinth
 
         public int GetBoardWidth() => board.GetLength(0) - 1;
         public int GetBoardHeight() => board.GetLength(1) - 1;
-        public Vector2 GetBoardOffset() => boardOffset;
 
         public bool IsSpaceWalkable(int x, int y)
         {
             if (IsPositionOutsideOfBoard(x, y)) return false;
 
-            if(cyanActive)
+            if (cyanActive)
                 return mapArray[x, y] != cyan && mapArray[x, y] != wall;
             else
                 return mapArray[x, y] != magenta && mapArray[x, y] != wall;
@@ -244,7 +246,7 @@ namespace Labyrinth
                             batch.Draw(floorSprite, position, new Microsoft.Xna.Framework.Color(20, 21, 46));
                             break;
                         case wall:
-                            batch.Draw(wallSprite, position, new Microsoft.Xna.Framework.Color(2, 56, 46));
+                            batch.Draw(wallSprite, position, new Microsoft.Xna.Framework.Color(56, 120, 0));
                             break;
                         case cyan:
                             batch.Draw(wallSprite, position, new Microsoft.Xna.Framework.Color(0, 247, 255));
@@ -268,16 +270,16 @@ namespace Labyrinth
                     switch (mapArray[x, y])
                     {
                         case cyan:
-                            if(cyanActive)
+                            if (cyanActive)
                                 batch.Draw(wallSprite, position, new Microsoft.Xna.Framework.Color(0, 247, 255));
                             else
-                                batch.Draw(floorSprite, position, new Microsoft.Xna.Framework.Color(20, 21, 46));
+                                batch.Draw(wallSprite, position, new Microsoft.Xna.Framework.Color(0, 247 / 3, 255 / 3));
                             break;
                         case magenta:
                             if (!cyanActive)
                                 batch.Draw(wallSprite, position, new Microsoft.Xna.Framework.Color(247, 0, 255));
                             else
-                                batch.Draw(floorSprite, position, new Microsoft.Xna.Framework.Color(20, 21, 46));
+                                batch.Draw(wallSprite, position, new Microsoft.Xna.Framework.Color(247 / 3, 0, 255 / 3));
                             break;
                     }
                 }
