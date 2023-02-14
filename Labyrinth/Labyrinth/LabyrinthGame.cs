@@ -15,6 +15,8 @@ namespace Labyrinth
         private SpriteFont spriteFont2;
         public static string text = "Press ENTER to switch walls";
         public static bool hasWon;
+        int secondsPassed;
+        int frame;
 
         private InputList gameInput;
 
@@ -60,6 +62,12 @@ namespace Labyrinth
             board.Update(0.016f);
             base.Update(gameTime);
 
+            frame++;
+            if (frame % 60 == 0 && !hasWon)
+            {
+                secondsPassed++;
+            }
+
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             InputSystem.INSTANCE.ParseAndSendInputs(dt);
@@ -78,7 +86,7 @@ namespace Labyrinth
                 _spriteBatch.DrawString(spriteFont2, "YOU WON WOOHOO!", new Vector2(100, 150), Color.White);
             else
                 _spriteBatch.DrawString(spriteFont, text, new Vector2(35, 1), Color.White);
-
+            _spriteBatch.DrawString(spriteFont, secondsPassed.ToString(), new Vector2(450, 258), Color.White);
             _spriteBatch.End();
             base.Draw(gameTime);
         }
