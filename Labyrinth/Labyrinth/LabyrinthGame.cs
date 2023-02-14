@@ -20,9 +20,9 @@ namespace Labyrinth
 
         private InputList gameInput;
 
-        public const int GAME_WIDTH = 512;
-        public const int GAME_HEIGHT = 288;
-        public const int GAME_UPSCALE = 2;
+        public const int GAME_WIDTH = 1920;
+        public const int GAME_HEIGHT = 1080;
+        public const float GAME_UPSCALE = 3.75f;
         public const int CELL_SIZE = 32;
         private Board board;
 
@@ -35,8 +35,9 @@ namespace Labyrinth
 
         protected override void Initialize()
         {
-            _graphics.PreferredBackBufferHeight = GAME_HEIGHT * GAME_UPSCALE;
-            _graphics.PreferredBackBufferWidth = GAME_WIDTH * GAME_UPSCALE;
+            _graphics.PreferredBackBufferHeight = (int)(GAME_HEIGHT * GAME_UPSCALE);
+            _graphics.PreferredBackBufferWidth = (int)(GAME_WIDTH * GAME_UPSCALE);
+            _graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
             // TODO: Add your initialization logic here
             gameInput = new InputList();
@@ -87,6 +88,7 @@ namespace Labyrinth
             else
                 _spriteBatch.DrawString(spriteFont, text, new Vector2(35, 1), Color.White);
             _spriteBatch.DrawString(spriteFont, secondsPassed.ToString(), new Vector2(450, 258), Color.White);
+
             _spriteBatch.End();
             base.Draw(gameTime);
         }
