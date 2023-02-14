@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Diagnostics;
+using System.Reflection.Metadata;
 
 namespace Labyrinth
 {
@@ -16,6 +17,8 @@ namespace Labyrinth
         public static string text = "Press ENTER to switch walls";
         public static bool hasWon;
         int secondsPassed;
+        int minutesPassed;
+        int hoursPassed;
         int frame;
 
         private InputList gameInput;
@@ -63,15 +66,26 @@ namespace Labyrinth
             board.Update(0.016f);
             base.Update(gameTime);
 
-            frame++;
-            if (frame % 60 == 0 && !hasWon)
-            {
-                secondsPassed++;
-            }
-
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             InputSystem.INSTANCE.ParseAndSendInputs(dt);
+
+            frame++;
+            if (frame % Math.Pow(60, 3) == 0 && !hasWon)
+            {
+                hoursPassed++;
+                minutesPassed = 0;
+                secondsPassed = 0;
+            }
+            else if (frame % Math.Pow(60, 2) == 0 && !hasWon)
+            {
+                minutesPassed++;
+                secondsPassed = 0;
+            }
+            else if (frame % Math.Pow(60, 1) == 0 && !hasWon)
+            {
+                secondsPassed++;
+            }
         }
 
         protected override void Draw(GameTime gameTime)
@@ -87,8 +101,18 @@ namespace Labyrinth
                 _spriteBatch.DrawString(spriteFont2, "YOU WON WOOHOO!", new Vector2(100, 150), Color.White);
             else
                 _spriteBatch.DrawString(spriteFont, text, new Vector2(35, 1), Color.White);
-            _spriteBatch.DrawString(spriteFont, secondsPassed.ToString(), new Vector2(450, 258), Color.White);
-
+            if (hoursPassed == 0 && minutesPassed == 0)
+            {
+                _spriteBatch.DrawString(spriteFont, secondsPassed.ToString() + "s", new Vector2(480, 258), Color.White);
+            }
+            else if (hoursPassed == 0)
+            {
+                _spriteBatch.DrawString(spriteFont, minutesPassed.ToString() + "min " + secondsPassed.ToString() + "s", new Vector2(435, 258), Color.White);
+            }
+            else
+            {
+                _spriteBatch.DrawString(spriteFont, hoursPassed.ToString() + "hrs" + minutesPassed.ToString() + "min " + secondsPassed.ToString() + "s", new Vector2(390, 258), Color.White);
+            }
             _spriteBatch.End();
             base.Draw(gameTime);
         }
