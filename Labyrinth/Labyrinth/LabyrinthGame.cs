@@ -12,7 +12,7 @@ namespace Labyrinth
         private SpriteBatch _spriteBatch;
 
         private SpriteFont spriteFont;
-
+        public static string text = "Press ENTER to switch walls";
 
         private InputList gameInput;
 
@@ -21,7 +21,6 @@ namespace Labyrinth
         public const int GAME_UPSCALE = 2;
         public const int CELL_SIZE = 32;
         private Board board;
-        private BoardObject boardObject;
 
         public LabyrinthGame()
         {
@@ -72,7 +71,7 @@ namespace Labyrinth
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: matrix);
 
             board.Draw(_spriteBatch, Vector2.Zero);
-            _spriteBatch.DrawString(spriteFont, "Press ENTER to switch walls", new Vector2(35, 1), Color.White);
+            _spriteBatch.DrawString(spriteFont, text, new Vector2(35, 1), Color.White);
 
             _spriteBatch.End();
             base.Draw(gameTime);

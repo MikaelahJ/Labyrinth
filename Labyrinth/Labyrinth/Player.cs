@@ -14,6 +14,8 @@ namespace Labyrinth
     public class Player : BoardObject
     {
         private Board board;
+        private bool changedText1;
+        private bool changedText2;
         public Player(int x, int y, ContentManager contentManager, Board board) : base(x, y)
         {
             sprite = contentManager.Load<Texture2D>("Char");
@@ -42,8 +44,20 @@ namespace Labyrinth
                     AttemptMove(1, 0, 0, isHoldingBox);
                     break;
                 case "SWITCH":
-                    if(CheckSquares())
+                    if (CheckSquares())
+                    {
                         board.cyanActive = !board.cyanActive;
+                        if (!changedText1)
+                        {
+                            LabyrinthGame.text = "Hold SPACE to pull box";
+                            changedText1 = true;
+                        }
+                        else if (!changedText2)
+                        {
+                            LabyrinthGame.text = "Get box to Goal";
+                            changedText2 = true;
+                        }
+                    }
                     break;
             }
         }
