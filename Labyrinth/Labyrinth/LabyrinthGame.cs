@@ -11,6 +11,8 @@ namespace Labyrinth
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        private InputList gameInput;
+
         public const int GAME_WIDTH = 512;
         public const int GAME_HEIGHT = 288;
         public const int GAME_UPSCALE = 2;
@@ -31,6 +33,9 @@ namespace Labyrinth
             _graphics.PreferredBackBufferWidth = GAME_WIDTH * GAME_UPSCALE;
             _graphics.ApplyChanges();
             // TODO: Add your initialization logic here
+            gameInput = new InputList();
+            gameInput.AddBaseInputs();
+            InputSystem.INSTANCE.SetInputList(gameInput);
             board = new(Content);
             base.Initialize();
         }
@@ -49,6 +54,10 @@ namespace Labyrinth
             // TODO: Add your update logic here
             board.Update(0.016f);
             base.Update(gameTime);
+
+            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            InputSystem.INSTANCE.ParseAndSendInputs(dt);
         }
 
         protected override void Draw(GameTime gameTime)
@@ -64,7 +73,6 @@ namespace Labyrinth
 
             _spriteBatch.End();
             base.Draw(gameTime);
-            
         }
     }
 }

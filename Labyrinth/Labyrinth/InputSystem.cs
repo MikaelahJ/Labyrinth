@@ -8,17 +8,17 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Sokoban;
 
 namespace Labyrinth
 {
-    public class InputSystem
+    public class InputSystem : ServiceSystem<IRecieveInput, InputSystem>
     {
         private InputList list;
         public static Player player;
 
         private Keys[] prevKeys;
 
-        private bool isHoldingBox;
         public void SetInputList(InputList _list)
         {
             list = _list;
@@ -39,27 +39,49 @@ namespace Labyrinth
                 if (input.input == "UP") choosenInput = "DOWN";
                 else if (input.input == "DOWN") choosenInput = "UP";
 
-                else
+                foreach (var key in input.GetKeys())
                 {
-                    foreach (var key in input.GetKeys())
+                    if (keyboardState.IsKeyDown(Keys.Space) && keyboardState.IsKeyDown(key))
                     {
-                        if (keyboardState.IsKeyDown(key) && key == Keys.Space)
-                        {
-                            isHoldingBox = true;
-                            Send(choosenInput, isHoldingBox);
-                        }
-                        else { isHoldingBox = false; }
-
                         if (prevKeys == null)
                         {
-                            Send(choosenInput, isHoldingBox);
+                            Send(choosenInput, true);
                         }
                         else if (prevKeys.Contains(key) == false)
                         {
-                            Send(choosenInput, isHoldingBox);
+                            Send(choosenInput, true);
+                        }
+                    }
+                    else if(keyboardState.IsKeyDown(key))
+                    {
+                        if (prevKeys == null)
+                        {
+                            Send(choosenInput, false);
+                        }
+                        else if (prevKeys.Contains(key) == false)
+                        {
+                            Send(choosenInput, false);
                         }
                     }
                 }
+                /*foreach (var key in input.GetKeys())
+                {
+
+
+                    if (keyboardState.IsKeyDown(key) && key == Keys.Space)
+                    {
+                        Debug.WriteLine("space");
+                        isHoldingBox = true;
+                        Send(choosenInput, isHoldingBox);
+                    }
+                    else { isHoldingBox = false; }
+
+                    if (prevKeys == null)
+                    {
+                        Debug.WriteLine("prevkeys");
+                        Send(choosenInput, isHoldingBox);
+                    }
+                }*/
 
                 foreach (var key in input.GetKeys())
                 {

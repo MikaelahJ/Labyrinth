@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Labyrinth
@@ -16,6 +17,7 @@ namespace Labyrinth
         const string RIGHT = "RIGHT";
         const string SPACE = "SPACE";
         const string PAUSE = "PAUSE";
+        const string SWITCH = "SWITCH";
 
         public class Input
         {
@@ -61,14 +63,14 @@ namespace Labyrinth
 
             if (inputs.Contains(input))
             {
-                Console.WriteLine("key + input pair already exists");
+                Debug.WriteLine("key + input pair already exists");
                 return;
             }
             foreach (var item in inputs)
             {
                 if (item.GetKeys().SequenceEqual(input.GetKeys()))
                 {
-                    Console.WriteLine("Keys already exists");
+                    Debug.WriteLine("Keys already exists");
                     return;
                 }
 
@@ -111,8 +113,11 @@ namespace Labyrinth
             Input baseDown = new(new List<Keys> { Keys.Down, Keys.S }, DOWN, true, 0.2f, 0.015f, 10);
             if (inputs.Contains(baseDown) == false) AddInput(baseDown);
 
-            Input baseSelect = new(new List<Keys> { Keys.Enter, Keys.Space }, SPACE, false);
+            Input baseSelect = new(new List<Keys> { Keys.Space }, SPACE, false);
             if (inputs.Contains(baseSelect) == false) AddInput(baseSelect);
+
+            Input baseSwitch = new(new List<Keys> { Keys.Enter }, SWITCH, false);
+            if (inputs.Contains(baseSwitch) == false) AddInput(baseSwitch);
 
             //Input baseBack = new Input(new List<Keys> { Keys.Z }, BACK, false);
             //if (inputs.Contains(baseBack) == false) AddInput(baseBack);

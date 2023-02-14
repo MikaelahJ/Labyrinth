@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace Labyrinth
             InputSystem.player = this;
         }
 
-        public void RecieveInput(string input, bool isHoldingBox = false)
+        public void RecieveInput(string input, bool isHoldingBox)
         {
             switch (input)
             {
@@ -40,10 +41,33 @@ namespace Labyrinth
                 case "RIGHT":
                     AttemptMove(1, 0, 0, isHoldingBox);
                     break;
+                case "SWITCH":
+                    if(CheckSquares())
+                        board.cyanActive = !board.cyanActive;
+                    break;
             }
         }
 
-        public override bool AttemptMove(int xMove, int yMove, int depth, bool isHolding = false)
+        private bool CheckSquares()
+        {
+            for (int _x = 0; _x < board.worldWidth; _x++)
+            {
+                for (int _y = 0; _y < board.worldHeight; _y++)
+                {
+                    if (board.mapArray[_x, _y] == 'c' || board.mapArray[_x, _y] == 'm')
+                    {
+                        BoardObject searched = board.GetObjectAtPosition(_x, _y);
+
+                        if (searched is Box box || searched is Player player)
+                            return false;
+                    }
+
+                }
+            }
+            return true;
+        }
+
+        public override bool AttemptMove(int xMove, int yMove, int depth, bool isHolding)
         {
             if (board.IsSpaceWalkable(x + xMove, y + yMove) == false) return false;
             if (board.IsPositionOutsideOfBoard(x + xMove, y + yMove)) return false;
@@ -63,18 +87,22 @@ namespace Labyrinth
                     return false;
                 }
             }
-           
 
-            DoMove(xMove, yMove);
-
-            BoardObject isBoxHere = board.GetObjectAtPosition(x - xMove, y - yMove);
-            if (isBoxHere != null)
+            if (isHolding)
             {
-                if (isBoxHere is Box box)
+                searched = board.GetObjectAtPosition(x - xMove, y - yMove);
+
+                if (searched != null)
                 {
-                    box.AttemptMove(xMove, yMove, depth);
+                    Debug.WriteLine("den är ju fan inte null då asså");
+                    if (searched is Box box)
+                    {
+                        box.AttemptMove(xMove, yMove, depth);
+                    }
                 }
             }
+
+            DoMove(xMove, yMove);
 
             return true;
         }

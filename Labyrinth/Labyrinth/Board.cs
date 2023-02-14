@@ -16,11 +16,11 @@ namespace Labyrinth
     public class Board
     {
         private int cellSize = 32;
-        private int worldWidth = 16;
-        private int worldHeight = 9;
+        public int worldWidth = 16;
+        public int worldHeight = 9;
         private char[,] board;
 
-        char[,] mapArray = new char[16, 9];
+        public char[,] mapArray = new char[16, 9];
 
         private ContentManager content;
         private List<BoardObject> objectsOnBoard;
@@ -41,6 +41,10 @@ namespace Labyrinth
         // our custom board objects
         public const char cyan = 'c';
         public const char magenta = 'm';
+
+        SpriteBatch _batch;
+
+        public bool cyanActive = true;
 
         private Vector2 boardOffset;
 
@@ -88,8 +92,6 @@ namespace Labyrinth
                     if (mapArray[x, y] != 0 && mapArray[x, y] != 'f') continue;
 
                     mapArray[x, y] = map.GetPixel(x, y).R < 200 ? type : 'f';
-
-                    Debug.WriteLine(mapArray[x, y]);
                 }
             }
         }
@@ -101,7 +103,11 @@ namespace Labyrinth
         public bool IsSpaceWalkable(int x, int y)
         {
             if (IsPositionOutsideOfBoard(x, y)) return false;
-            return board[x, y] != wall;
+
+            if(cyanActive)
+                return mapArray[x, y] != cyan && mapArray[x, y] != wall;
+            else
+                return mapArray[x, y] != magenta && mapArray[x, y] != wall;
         }
 
         public void AddObject(char c, int x, int y)
@@ -223,6 +229,8 @@ namespace Labyrinth
 
         public void Draw(SpriteBatch batch, Vector2 offset)
         {
+            _batch = batch;
+
             if (mapArray == null) return;
             for (int x = 0; x < worldWidth; x++)
             {
@@ -251,11 +259,34 @@ namespace Labyrinth
                 }
             }
 
+            for (int x = 0; x < worldWidth; x++)
+            {
+                for (int y = 0; y < worldHeight; y++)
+                {
+                    Vector2 position = new Vector2(x * 32, y * 32);
+
+                    switch (mapArray[x, y])
+                    {
+                        case cyan:
+                            if(cyanActive)
+                                batch.Draw(wallSprite, position, new Microsoft.Xna.Framework.Color(0, 247, 255));
+                            else
+                                batch.Draw(floorSprite, position, new Microsoft.Xna.Framework.Color(20, 21, 46));
+                            break;
+                        case magenta:
+                            if (!cyanActive)
+                                batch.Draw(wallSprite, position, new Microsoft.Xna.Framework.Color(247, 0, 255));
+                            else
+                                batch.Draw(floorSprite, position, new Microsoft.Xna.Framework.Color(20, 21, 46));
+                            break;
+                    }
+                }
+            }
+
             foreach (var obj in objectsOnBoard)
             {
                 obj.Draw(batch, offset);
             }
-
         }
 
         public bool GetIsLevelBound()
