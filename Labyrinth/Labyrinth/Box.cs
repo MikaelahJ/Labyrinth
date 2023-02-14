@@ -37,7 +37,7 @@ namespace Labyrinth
             DoMove(xMove, yMove);
 
             if (new Vector2(x, y) == board.goalPos)
-                Debug.WriteLine("you won"); //TODO: ADD WINSTATE
+                LabyrinthGame.hasWon = true;
 
             return true;
         }

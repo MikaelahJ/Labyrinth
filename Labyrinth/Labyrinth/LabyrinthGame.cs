@@ -12,7 +12,9 @@ namespace Labyrinth
         private SpriteBatch _spriteBatch;
 
         private SpriteFont spriteFont;
+        private SpriteFont spriteFont2;
         public static string text = "Press ENTER to switch walls";
+        public static bool hasWon;
 
         private InputList gameInput;
 
@@ -46,6 +48,7 @@ namespace Labyrinth
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             spriteFont = Content.Load<SpriteFont>("File");
+            spriteFont2 = Content.Load<SpriteFont>("File2");
             // TODO: use this.Content to load your game content here
         }
 
@@ -71,7 +74,10 @@ namespace Labyrinth
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: matrix);
 
             board.Draw(_spriteBatch, Vector2.Zero);
-            _spriteBatch.DrawString(spriteFont, text, new Vector2(35, 1), Color.White);
+            if (hasWon)
+                _spriteBatch.DrawString(spriteFont2, "YOU WON WOOHOO!", new Vector2(100, 150), Color.White);
+            else
+                _spriteBatch.DrawString(spriteFont, text, new Vector2(35, 1), Color.White);
 
             _spriteBatch.End();
             base.Draw(gameTime);
